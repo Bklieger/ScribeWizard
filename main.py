@@ -14,6 +14,11 @@ if 'groq' not in st.session_state:
     if GROQ_API_KEY:
         st.session_state.groq = Groq()
 
+st.set_page_config(
+    page_title="Groqnotes",
+    page_icon="🗒️",
+)
+
 class GenerationStatistics:
     def __init__(self, input_time=0,output_time=0,input_tokens=0,output_tokens=0,total_time=0,model_name="llama3-8b-8192"):
         self.input_time = input_time
