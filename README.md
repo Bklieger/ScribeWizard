@@ -13,13 +13,18 @@ Groqnotes is a streamlit app that scaffolds the creation of structured lecture n
 
 - 🎧 Generate structured notes using transcribed audio by Whisper-large and text by Llama3
 - ⚡ Lightning fast speed transcribing audio and generating text using Groq
-- 📖 Scaffolded prompting that strategically switches between Llama3-70b and Llama3-8b to balance speed and quality
-- 🖊️ Uses markdown styling to create aesthetic notes on the streamlit app that can include tables and code 
+- 📖 Scaffolded prompting strategically switches between Llama3-70b and Llama3-8b to balance speed and quality
+- 🖊️ Markdown styling creates aesthetic notes on the streamlit app that can include tables and code 
 - 📂 Allows user to download a text or PDF file with the entire notes contents
 
 ### Example Generated Notes:
 
-Coming soon...
+| Example                                      | Youtube Link                                                                                                                                |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Transformers Explained by Google Cloud Tech](examples/transformers_explained/generated_notes.pdf)             |  https://www.youtube.com/watch?v=SZorAJ4I-sA                                       |
+| [The Essence of Calculus by 3Blue1Brown](examples/essence_calculus/generated_notes.pdf) | https://www.youtube.com/watch?v=WUvTyaaNkzM                                            |
+
+> As with all generative AI, content may include inaccurate or placeholder information. Groqnotes is in beta and all feedback is welcome!
 
 ---
 
