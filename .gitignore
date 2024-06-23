@@ -1,3 +1,5 @@
 .env
 venv
 .venv
+**.pyc
+downloads/
