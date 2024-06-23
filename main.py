@@ -5,6 +5,7 @@ import os
 from io import BytesIO
 from md2pdf.core import md2pdf
 from dotenv import load_dotenv
+from download import download_video_audio, delete_download
 
 load_dotenv()
 
@@ -21,7 +22,7 @@ st.set_page_config(
     page_title="Groqnotes",
     page_icon="🗒️",
 )
-
+      
 class GenerationStatistics:
     def __init__(self, input_time=0,output_time=0,input_tokens=0,output_tokens=0,total_time=0,model_name="llama3-8b-8192"):
         self.input_time = input_time
@@ -334,17 +335,42 @@ try:
                 file_name='generated_notes.pdf',
                 mime='application/pdf'
             )
+            st.session_state.button_disabled = False
         else:
             raise ValueError("Please generate content first before downloading the notes.")
 
+    input_method = st.radio("Choose input method:", ["Upload audio file", "YouTube link"])
+    audio_file = None
+    youtube_link = None
+    groq_input_key = None
     with st.form("groqform"):
         if not GROQ_API_KEY:
             groq_input_key = st.text_input("Enter your Groq API Key (gsk_yA...):", "", type="password")
-
-        audio_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "m4a"]) # TODO: Add a max size
+        
+        # Add radio button to choose between file upload and YouTube link
+        
+        if input_method == "Upload audio file":
+            audio_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "m4a"]) # TODO: Add a max size
+        else:
+            youtube_link = st.text_input("Enter YouTube link:", "")
 
         # Generate button
         submitted = st.form_submit_button(st.session_state.button_text, on_click=disable, disabled=st.session_state.button_disabled)
+
+        #processing status
+        status_text = st.empty()
+        def display_status(text):
+            status_text.write(text)
+
+        def clear_status():
+            status_text.empty()
+
+        download_status_text = st.empty()
+        def display_download_status(text:str):
+            download_status_text.write(text)    
+
+        def clear_download_status():
+            download_status_text.empty()
         
         # Statistics
         placeholder = st.empty()
@@ -359,22 +385,49 @@ try:
                     placeholder.empty()
 
         if submitted:
-            if audio_file is None:
-                raise ValueError("Please upload an audio file")
+            if input_method == "Upload audio file" and audio_file is None:
+                st.error("Please upload an audio file")
+            elif input_method == "YouTube link" and not youtube_link:
+                st.error("Please enter a YouTube link")
+            else:
+                st.session_state.button_disabled = True
+                # Show temporary message before transcription is generated and statistics show
+            
+            audio_file_path = None
 
-            st.session_state.button_disabled = True
-            st.session_state.statistics_text = "Transcribing audio in background...."  # Show temporary message before transcription is generated and statistics show
-            display_statistics()
+            if input_method == "YouTube link":
+                display_status("Downloading audio from YouTube link ....")
+                audio_file_path = download_video_audio(youtube_link, display_download_status)
+                if audio_file_path is None:
+                    st.error("Failed to download audio from YouTube link. Please try again.")
+                    enable()
+                    clear_status()
+                else:
+                    # Read the downloaded file and create a file-like objec
+                    display_status("Processing Youtube audio ....")
+                    with open(audio_file_path, 'rb') as f:
+                        file_contents = f.read()
+                    audio_file = BytesIO(file_contents)
+                    audio_file.name = os.path.basename(audio_file_path)  # Set the file name
+                clear_download_status()
 
             if not GROQ_API_KEY:
                 st.session_state.groq = Groq(api_key=groq_input_key)
 
+            display_status("Transcribing audio in background....")
             transcription_text = transcribe_audio(audio_file)
 
+            display_statistics()
+            delete_download(audio_file_path)
+
+            display_status("Generating notes structure....")
             large_model_generation_statistics, notes_structure = generate_notes_structure(transcription_text)
             print("Structure: ",notes_structure)
 
+            display_status("Generating notes ...")
             total_generation_statistics = GenerationStatistics(model_name="llama3-8b-8192")
+            clear_status()
+
 
             try:
                 notes_structure_json = json.loads(notes_structure)
@@ -403,7 +456,6 @@ try:
                             stream_section_content(content)
 
                 stream_section_content(notes_structure_json)
-            
             except json.JSONDecodeError:
                 st.error("Failed to decode the notes structure. Please try again.")
 

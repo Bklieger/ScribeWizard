@@ -32,6 +32,7 @@ markdown2==2.4.13
 MarkupSafe==2.1.5
 md2pdf==1.0.1
 mdurl==0.1.2
+mutagen==1.47.0
 numpy==1.26.4
 packaging==24.0
 pandas==2.2.2
@@ -39,6 +40,7 @@ pillow==10.3.0
 protobuf==4.25.3
 pyarrow==16.1.0
 pycparser==2.22
+pycryptodomex==3.20.0
 pydantic==2.7.1
 pydantic_core==2.18.2
 pydeck==0.9.1
@@ -49,7 +51,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
 referencing==0.35.1
-requests==2.31.0
+requests==2.32.3
 rich==13.7.1
 rpds-py==0.18.1
 six==1.16.0
@@ -64,6 +66,9 @@ tornado==6.4
 typing_extensions==4.11.0
 tzdata==2024.1
 urllib3==2.2.1
+watchdog==4.0.1
 weasyprint==62.3
 webencodings==0.5.1
+websockets==12.0
+yt-dlp @ https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz
 zopfli==0.2.3
