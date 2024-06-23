@@ -463,7 +463,12 @@ try:
 
 except Exception as e:
     st.session_state.button_disabled = False
-    st.error(e)
+
+    if hasattr(e, 'status_code') and e.status_code == 413:
+        # In the future, this limitation will be fixed as Groqnotes will automatically split the audio file and transcribe each part.
+        st.error("The audio file is too large. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB.")
+    else:
+        st.error(e)
 
     if st.button("Clear"):
         st.rerun()
