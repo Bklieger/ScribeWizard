@@ -103,10 +103,15 @@ Improvements through PRs are welcome!
 This release is an initial release of the application codebase. It includes the following features:
 
 🎧 Generate structured notes using transcribed audio by Whisper-large and text by Llama3
+
 ⚡ Lightning fast speed transcribing audio and generating text using Groq
+
 📖 Scaffolded prompting strategically switches between Llama3-70b and Llama3-8b to balance speed and quality
+
 🖊️ Markdown styling creates aesthetic notes on the streamlit app that can include tables and code
+
 📂 Allows user to download a text or PDF file with the entire notes contents
+
 
 
 ### Future Features:
