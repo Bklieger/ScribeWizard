@@ -5,7 +5,7 @@ import os
 from io import BytesIO
 from md2pdf.core import md2pdf
 from dotenv import load_dotenv
-from download import download_video_audio
+from download import download_video_audio, delete_download
 
 load_dotenv()
 
@@ -392,7 +392,8 @@ try:
             else:
                 st.session_state.button_disabled = True
                 # Show temporary message before transcription is generated and statistics show
-                
+            
+            audio_file_path = None
 
             if input_method == "YouTube link":
                 display_status("Downloading audio from YouTube link ....")
@@ -417,6 +418,7 @@ try:
             transcription_text = transcribe_audio(audio_file)
 
             display_statistics()
+            delete_download(audio_file_path)
 
             display_status("Generating notes structure....")
             large_model_generation_statistics, notes_structure = generate_notes_structure(transcription_text)

@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 import yt_dlp as youtube_dl
 import os
 import time
+import os
+import shutil
 
 max_retries = 3
 delay = 2
@@ -67,3 +69,23 @@ def download_video_audio(url, external_logger=lambda x: None):
             if retries >= max_retries:
                 raise e
             time.sleep(delay)
+
+
+
+def delete_download(path):
+    try:
+        if os.path.isfile(path):
+            os.remove(path)
+            print(f"File {path} has been deleted.")
+        elif os.path.isdir(path):
+            shutil.rmtree(path)
+            print(f"Directory {path} and its contents have been deleted.")
+        else:
+            print(f"The path {path} is neither a file nor a directory.")
+    except PermissionError:
+        print(f"Permission denied: Unable to delete {path}.")
+    except FileNotFoundError:
+        print(f"File or directory not found: {path}")
+    except Exception as e:
+        print(f"An error occurred while trying to delete {path}: {str(e)}")
+        
