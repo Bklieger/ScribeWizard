@@ -4,6 +4,9 @@ import json
 import os
 from io import BytesIO
 from md2pdf.core import md2pdf
+from dotenv import load_dotenv
+
+load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
 
