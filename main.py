@@ -11,6 +11,9 @@ load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
 
+MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
+FILE_TOO_LARGE_MESSAGE = "The audio file is too large. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB."
+
 if 'api_key' not in st.session_state:
     st.session_state.api_key = GROQ_API_KEY
 
@@ -408,6 +411,11 @@ try:
                     with open(audio_file_path, 'rb') as f:
                         file_contents = f.read()
                     audio_file = BytesIO(file_contents)
+
+                    # Check size first to ensure will work with Whisper
+                    if os.path.getsize(audio_file_path) > MAX_FILE_SIZE:
+                        raise ValueError(FILE_TOO_LARGE_MESSAGE)
+
                     audio_file.name = os.path.basename(audio_file_path)  # Set the file name
                     delete_download(audio_file_path)
                 clear_download_status()
@@ -467,7 +475,7 @@ except Exception as e:
 
     if hasattr(e, 'status_code') and e.status_code == 413:
         # In the future, this limitation will be fixed as Groqnotes will automatically split the audio file and transcribe each part.
-        st.error("The audio file is too large. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB.")
+        st.error(FILE_TOO_LARGE_MESSAGE)
     else:
         st.error(e)
 
