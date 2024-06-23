@@ -472,3 +472,7 @@ except Exception as e:
 
     if st.button("Clear"):
         st.rerun()
+    
+    # Remove audio after exception to prevent data storage leak
+    if audio_file_path is not None:
+        delete_download(audio_file_path)
