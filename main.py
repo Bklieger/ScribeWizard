@@ -409,6 +409,7 @@ try:
                         file_contents = f.read()
                     audio_file = BytesIO(file_contents)
                     audio_file.name = os.path.basename(audio_file_path)  # Set the file name
+                    delete_download(audio_file_path)
                 clear_download_status()
 
             if not GROQ_API_KEY:
@@ -418,7 +419,7 @@ try:
             transcription_text = transcribe_audio(audio_file)
 
             display_statistics()
-            delete_download(audio_file_path)
+            
 
             display_status("Generating notes structure....")
             large_model_generation_statistics, notes_structure = generate_notes_structure(transcription_text)
