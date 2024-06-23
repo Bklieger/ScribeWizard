@@ -393,32 +393,43 @@ try:
                 st.session_state.button_disabled = True
                 # Show temporary message before transcription is generated and statistics show
             
-            audio_file_path = None
+            audio_file_paths = None
+            audio_files = []
 
             if input_method == "YouTube link":
                 display_status("Downloading audio from YouTube link ....")
-                audio_file_path = download_video_audio(youtube_link, display_download_status)
-                if audio_file_path is None:
+                audio_file_paths = download_video_audio(youtube_link, display_download_status)
+                if audio_file_paths is None:
                     st.error("Failed to download audio from YouTube link. Please try again.")
                     enable()
                     clear_status()
                 else:
                     # Read the downloaded file and create a file-like objec
                     display_status("Processing Youtube audio ....")
-                    with open(audio_file_path, 'rb') as f:
-                        file_contents = f.read()
-                    audio_file = BytesIO(file_contents)
-                    audio_file.name = os.path.basename(audio_file_path)  # Set the file name
+                    for audio_file_path in audio_file_paths:
+                        print(f"Processing segment {audio_file_path}.")
+                        with open(audio_file_path, 'rb') as f:
+                            file_contents = f.read()
+                        audio_file = BytesIO(file_contents)
+                        audio_file.name = os.path.basename(audio_file_path)  # Set the file name
+                        audio_files.append(audio_file)
+
                 clear_download_status()
 
             if not GROQ_API_KEY:
                 st.session_state.groq = Groq(api_key=groq_input_key)
 
+            transcription_text = ""
+            
             display_status("Transcribing audio in background....")
-            transcription_text = transcribe_audio(audio_file)
+
+            for audio_file in audio_files:
+                transcription_text += transcribe_audio(audio_file)
 
             display_statistics()
-            delete_download(audio_file_path)
+
+            for audio_file_path in audio_file_paths:
+                delete_download(audio_file_path)
 
             display_status("Generating notes structure....")
             large_model_generation_statistics, notes_structure = generate_notes_structure(transcription_text)
@@ -474,5 +485,6 @@ except Exception as e:
         st.rerun()
     
     # Remove audio after exception to prevent data storage leak
-    if audio_file_path is not None:
-        delete_download(audio_file_path)
+    if audio_file_paths is not None:
+        for audio_file_path in audio_file_paths:
+            delete_download(audio_file_path)

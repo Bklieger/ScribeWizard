@@ -44,6 +44,7 @@ pycryptodomex==3.20.0
 pydantic==2.7.1
 pydantic_core==2.18.2
 pydeck==0.9.1
+pydub==0.25.1
 pydyf==0.10.0
 Pygments==2.18.0
 pyphen==0.15.0
