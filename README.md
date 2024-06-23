@@ -1,6 +1,6 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-# Groqnotes: Generate structured notes from audio using Groq, Whisper, and Llama3
+# Groqnotes: Generate organized notes from audio using Groq, Whisper, and Llama3
 
 Groqnotes is a streamlit app that scaffolds the creation of structured lecture notes by iteratively parsing and generating notes from transcribed audio lectures using Groq's Whisper API. The app mixes Llama3-8b and Llama3-70b, utilizing the larger model for generating the notes structure and the faster of the two for creating the content.
 
@@ -88,7 +88,7 @@ python3 -m streamlit run main.py
 
 ### Limitations
 
-Groqnotes may generate inaccurate information or placeholder content. It should be used to generate books for entertainment purposes only.
+Groqnotes may generate inaccurate information or placeholder content. It should be used to generate notes for entertainment purposes only.
 
 
 ## Contributing
