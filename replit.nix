@@ -24,8 +24,6 @@
     pkgs.pkg-config
     pkgs.arrow-cpp
     pkgs.ghostscript
-    pkgs.python3
-    pkgs.python3Packages.weasyprint
     pkgs.ffmpeg
   ];
 }
