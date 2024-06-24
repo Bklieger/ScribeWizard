@@ -31,13 +31,18 @@ Groqnotes is a streamlit app that scaffolds the creation of structured lecture n
 ## Quickstart
 
 > [!IMPORTANT]
-> To use Groqnotes, you can use the hosted version at [groqnotes.streamlit.app](https://groqnotes.streamlit.app)
-> Alternatively, you can run groqnotes locally with streamlit using the quickstart instructions.
+> To use Groqnotes, you can use a hosted version at [groqnotes.streamlit.app](https://groqnotes.streamlit.app) or [groqnotes.replit.app](https://groqnotes.streamlit.app).
+> Alternatively, you can run groqnotes locally with Streamlit using the quickstart instructions.
 
 
 ### Hosted on Streamlit:
 
 To use Groqnotes, you can use the hosted version at [groqnotes.streamlit.app](https://groqnotes.streamlit.app)
+
+### Hosted on Replit:
+
+You can also use the hosted version on replit at [groqnotes.replit.app](https://groqnotes.streamlit.app)
+> The project can be forked on replit here: [replit.com/@bklieger/groqnotes](https://replit.com/@bklieger/groqnotes)
 
 
 ### Run locally:
