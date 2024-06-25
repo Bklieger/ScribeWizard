@@ -59,6 +59,15 @@ def download_video_audio(url, external_logger=lambda x: None):
                 print("youtube-dl result :", res)
                 mp3_filename = os.path.splitext(filename)[0] + '.mp3'
                 print('mp3 file name - ', mp3_filename)
+                
+                # For tracking storage
+                download_dir = "./downloads/audio"
+                files = os.listdir(download_dir)
+                print(f"Files in {download_dir}:")
+                for file in files:
+                    print(f"- {file}")
+                print(f"Total number of files: {len(files)}")
+                
                 return mp3_filename
         except Exception as e:
             retries += 1
