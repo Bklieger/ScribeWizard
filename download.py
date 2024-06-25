@@ -43,6 +43,7 @@ def get_ydl_opts(external_logger=lambda x: None):
         "logger": MyLogger(external_logger),
     "outtmpl": "./downloads/audio/%(title)s.%(ext)s",  # Set the output filename directly
     "progress_hooks": [my_hook],
+    "ratelimit": 1000000, # Limit CPU Usage
 }
 
 
