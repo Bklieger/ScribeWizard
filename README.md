@@ -81,10 +81,6 @@ Finally, you can run the streamlit app.
 python3 -m streamlit run main.py
 ~~~
 
-## One-Click Deployment
-
-[![Deploy to RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=296)
-
 ## Details
 
 
@@ -104,6 +100,11 @@ Groqnotes may generate inaccurate information or placeholder content. It should 
 Improvements through PRs are welcome!
 
 
+## One-Click Deployment
+
+[![Deploy to RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=296)
+
+
 ## Changelog
 
 ### v0.1.0
@@ -119,7 +120,6 @@ This release is an initial release of the application codebase. It includes the 
 🖊️ Markdown styling creates aesthetic notes on the streamlit app that can include tables and code
 
 📂 Allows user to download a text or PDF file with the entire notes contents
-
 
 
 ### Future Features:
