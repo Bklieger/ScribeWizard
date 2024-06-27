@@ -11,6 +11,14 @@ load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
 
+SUPPORTED_FILE_TYPES = ['flac', 'mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'ogg', 'opus', 'wav', 'webm']
+
+def is_supported_file_type(file_name: str) -> bool:
+    """
+    Check if the file type is supported.
+    """
+    return file_name.split('.')[-1].lower() in SUPPORTED_FILE_TYPES
+
 MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
 FILE_TOO_LARGE_MESSAGE = "The audio file is too large for the current size and rate limits using Whisper. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB."
 
@@ -389,7 +397,7 @@ try:
         # Add radio button to choose between file upload and YouTube link
         
         if input_method == "Upload audio file":
-            audio_file = st.file_uploader("Upload an audio file", type=["mp3", "wav", "m4a"]) # TODO: Add a max size
+            audio_file = st.file_uploader("Upload an audio file", type=SUPPORTED_FILE_TYPES) # TODO: Add a max size
         else:
             youtube_link = st.text_input("Enter YouTube link:", "")
 
@@ -426,6 +434,8 @@ try:
         if submitted:
             if input_method == "Upload audio file" and audio_file is None:
                 st.error("Please upload an audio file")
+            elif input_method == "Upload audio file" and not is_supported_file_type(audio_file.name):
+                st.error(f"Unsupported file type. Please upload one of the following types: {', '.join(SUPPORTED_FILE_TYPES)}")
             elif input_method == "YouTube link" and not youtube_link:
                 st.error("Please enter a YouTube link")
             else:
