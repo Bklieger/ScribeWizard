@@ -167,21 +167,42 @@ def create_pdf_file(content: str):
     pdf_buffer.seek(0)
     return pdf_buffer
 
-def transcribe_audio(audio_file):
+def split_audio_file(audio_file: BytesIO, chunk_size: int = MAX_FILE_SIZE) -> list:
+    """
+    Splits the audio file into smaller chunks.
+    """
+    audio_file.seek(0, os.SEEK_END)
+    file_size = audio_file.tell()
+    audio_file.seek(0)
+    
+    chunks = []
+    while file_size > 0:
+        chunk = audio_file.read(min(chunk_size, file_size))
+        chunks.append(BytesIO(chunk))
+        file_size -= len(chunk)
+    
+    return chunks
+
+def transcribe_audio(audio_file: BytesIO) -> str:
     """
     Transcribes audio using Groq's Whisper API.
     """
-    transcription = st.session_state.groq.audio.transcriptions.create(
-      file=audio_file,
-      model="whisper-large-v3",
-      prompt="",
-      response_format="json",
-      language="en",
-      temperature=0.0 
-    )
-
-    results = transcription.text
-    return results
+    chunks = split_audio_file(audio_file)
+    transcription_results = []
+    
+    for chunk in chunks:
+        transcription = st.session_state.groq.audio.transcriptions.create(
+            file=chunk,
+            model="whisper-large-v3",
+            prompt="",
+            response_format="json",
+            language="en",
+            temperature=0.0 
+        )
+        transcription_results.append(transcription.text)
+    
+    combined_transcription = " ".join(transcription_results)
+    return combined_transcription
 
 def generate_notes_structure(transcript: str, model: str = "llama3-70b-8192"):
     """
@@ -426,11 +447,6 @@ try:
                     with open(audio_file_path, 'rb') as f:
                         file_contents = f.read()
                     audio_file = BytesIO(file_contents)
-
-                    # Check size first to ensure will work with Whisper
-                    if os.path.getsize(audio_file_path) > MAX_FILE_SIZE:
-                        raise ValueError(FILE_TOO_LARGE_MESSAGE)
-
                     audio_file.name = os.path.basename(audio_file_path)  # Set the file name
                     delete_download(audio_file_path)
                 clear_download_status()
@@ -446,7 +462,7 @@ try:
 
             display_status("Generating notes structure....")
             large_model_generation_statistics, notes_structure = generate_notes_structure(transcription_text, model=str(outline_selected_model))
-            print("Structure: ",notes_structure)
+            print("Structure: ", notes_structure)
 
             display_status("Generating notes ...")
             total_generation_statistics = GenerationStatistics(model_name="llama3-8b-8192")
@@ -455,7 +471,7 @@ try:
 
             try:
                 notes_structure_json = json.loads(notes_structure)
-                notes = NoteSection(structure=notes_structure_json,transcript=transcription_text)
+                notes = NoteSection(structure=notes_structure_json, transcript=transcription_text)
                 
                 if 'notes' not in st.session_state:
                     st.session_state.notes = notes
@@ -465,7 +481,7 @@ try:
                 def stream_section_content(sections):
                     for title, content in sections.items():
                         if isinstance(content, str):
-                            content_stream = generate_section(transcript=transcription_text, existing_notes=notes.return_existing_contents(), section=(title + ": " + content),model=str(content_selected_model))
+                            content_stream = generate_section(transcript=transcription_text, existing_notes=notes.return_existing_contents(), section=(title + ": " + content), model=str(content_selected_model))
                             for chunk in content_stream:
                                 # Check if GenerationStatistics data is returned instead of str tokens
                                 chunk_data = chunk
