@@ -1,0 +1,17 @@
+modules = ["python-3.12"]
+run = "python -m streamlit run main.py"
+
+[nix]
+channel = "stable-23_11"
+
+[deployment]
+run = ["sh", "-c", "echo \"\" | python -m streamlit run main.py"]
+deploymentTarget = "cloudrun"
+
+[[ports]]
+localPort = 8501
+externalPort = 80
+
+[[ports]]
+localPort = 8502
+externalPort = 3000

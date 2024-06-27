@@ -12,7 +12,7 @@ load_dotenv()
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
 
 MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
-FILE_TOO_LARGE_MESSAGE = "The audio file is too large. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB."
+FILE_TOO_LARGE_MESSAGE = "The audio file is too large for the current size and rate limits using Whisper. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB."
 
 audio_file_path = None
 
@@ -24,7 +24,7 @@ if 'groq' not in st.session_state:
         st.session_state.groq = Groq()
 
 st.set_page_config(
-    page_title="Groqnotes",
+    page_title="GroqNotes",
     page_icon="🗒️",
 )
       
@@ -264,7 +264,7 @@ if 'statistics_text' not in st.session_state:
     st.session_state.statistics_text = ""
 
 st.write("""
-# Groqnotes: Create structured notes from audio 🗒️⚡
+# GroqNotes: Create structured notes from audio 🗒️⚡
 """)
 
 def disable():
@@ -489,7 +489,7 @@ except Exception as e:
     st.session_state.button_disabled = False
 
     if hasattr(e, 'status_code') and e.status_code == 413:
-        # In the future, this limitation will be fixed as Groqnotes will automatically split the audio file and transcribe each part.
+        # In the future, this limitation will be fixed as GroqNotes will automatically split the audio file and transcribe each part.
         st.error(FILE_TOO_LARGE_MESSAGE)
     else:
         st.error(e)
