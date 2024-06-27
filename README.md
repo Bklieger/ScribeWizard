@@ -1,12 +1,10 @@
-<h1 align="center">
+<h2 align="center">
   <br>
   <img src="https://i.imgur.com/scoiUgD.png" alt="Generate Organizes Notes with GroqNotes" width="200">
   <br>
    GroqNotes: Generate organized notes from audio using Groq, Whisper, and Llama3
   <br>
-</h1>
-
-<h4 align="center">Scaffolding the creation of structured notes by iteratively structuring and generating notes from transcribed audio</h4>
+</h2>
 
 <p align="center">
   <a href="https://github.com/bklieger/groqnotes/stargazers"><img src="https://img.shields.io/github/stars/bklieger/groqnotes"></a>
