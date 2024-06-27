@@ -1,13 +1,35 @@
-![License](https://img.shields.io/badge/license-MIT-green)
+<h1 align="center">
+  <br>
+  <img src="https://i.imgur.com/scoiUgD.png" alt="Generate Organizes Notes with GroqNotes" width="200">
+  <br>
+   GroqNotes: Generate organized notes from audio using Groq, Whisper, and Llama3
+  <br>
+</h1>
 
-# GroqNotes: Generate organized notes from audio using Groq, Whisper, and Llama3
+<h4 align="center">Scaffolding the creation of structured notes by iteratively structuring and generating notes from transcribed audio</h4>
 
-GroqNotes is a streamlit app that scaffolds the creation of structured lecture notes by iteratively parsing and generating notes from transcribed audio lectures using Groq's Whisper API. The app mixes Llama3-8b and Llama3-70b, utilizing the larger model for generating the notes structure and the faster of the two for creating the content.
+<p align="center">
+  <a href="https://github.com/bklieger/groqnotes/stargazers"><img src="https://img.shields.io/github/stars/bklieger/groqnotes"></a>
+  <a href="https://github.com/bklieger/groqnotes/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#overview-">Overview</a> •
+  <a href="#features-">Features</a> •
+  <a href="#Quickstart-">Quickstart</a> •
+  <a href="#Contributing">Contributing</a> 
+</p>
 
 [Demo of GroqNotes](https://github.com/Bklieger/groqnotes/assets/62450410/9c54dab3-21ad-42d6-8504-364e0aa6acde)
 > Demo of GroqNotes fast transcription of audio and generation of structured notes
 
----
+
+## Overview
+
+GroqNotes is a streamlit app that scaffolds the creation of structured lecture notes by iteratively structuring and generating notes from transcribed audio lectures using Groq's Whisper API. The app mixes Llama3-8b and Llama3-70b, utilizing the larger model for generating the notes structure and the faster of the two for creating the content.
+
 
 ### Features
 
