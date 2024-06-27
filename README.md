@@ -15,9 +15,9 @@
 </p>
 
 <p align="center">
- <a href="#overview-">Overview</a> •
- <a href="#features-">Features</a> •
- <a href="#Quickstart-">Quickstart</a> •
+ <a href="#Overview">Overview</a> •
+ <a href="#Features">Features</a> •
+ <a href="#Quickstart">Quickstart</a> •
  <a href="#Contributing">Contributing</a>
 </p>
 
