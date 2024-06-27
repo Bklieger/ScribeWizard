@@ -1,26 +1,30 @@
 <h2 align="center">
-  <br>
-  <img src="https://i.imgur.com/scoiUgD.png" alt="Generate Organizes Notes with GroqNotes" width="200">
-  <br>
-   GroqNotes: Generate organized notes from audio using Groq, Whisper, and Llama3
-  <br>
+ <br>
+ <img src="https://i.imgur.com/scoiUgD.png" alt="Generate Organizes Notes with GroqNotes" width="150">
+ <br>
+ <br>
+ GroqNotes: Generate organized notes from audio<br>using Groq, Whisper, and Llama3
+ <br>
 </h2>
 
 <p align="center">
-  <a href="https://github.com/bklieger/groqnotes/stargazers"><img src="https://img.shields.io/github/stars/bklieger/groqnotes"></a>
-  <a href="https://github.com/bklieger/groqnotes/blob/main/LICENSE.md">
-    <img src="https://img.shields.io/badge/License-MIT-green.svg">
-  </a>
+ <a href="https://github.com/bklieger/groqnotes/stargazers"><img src="https://img.shields.io/github/stars/bklieger/groqnotes"></a>
+ <a href="https://github.com/bklieger/groqnotes/blob/main/LICENSE.md">
+ <img src="https://img.shields.io/badge/License-MIT-green.svg">
+ </a>
 </p>
 
 <p align="center">
-  <a href="#overview-">Overview</a> •
-  <a href="#features-">Features</a> •
-  <a href="#Quickstart-">Quickstart</a> •
-  <a href="#Contributing">Contributing</a> 
+ <a href="#overview-">Overview</a> •
+ <a href="#features-">Features</a> •
+ <a href="#Quickstart-">Quickstart</a> •
+ <a href="#Contributing">Contributing</a>
 </p>
 
+<br>
+
 [Demo of GroqNotes](https://github.com/Bklieger/groqnotes/assets/62450410/9c54dab3-21ad-42d6-8504-364e0aa6acde)
+
 > Demo of GroqNotes fast transcription of audio and generation of structured notes
 
 
