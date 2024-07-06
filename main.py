@@ -449,7 +449,7 @@ try:
             print("Structure: ",notes_structure)
 
             display_status("Generating notes ...")
-            total_generation_statistics = GenerationStatistics(model_name="llama3-8b-8192")
+            total_generation_statistics = GenerationStatistics(model_name=str(content_selected_model))
             clear_status()
 
 
