@@ -325,7 +325,7 @@ try:
         st.write(f"By default, GroqNotes uses Llama3-70b for generating the notes outline and Llama3-8b for the content. This balances quality with speed and rate limit usage. You can customize these selections below.")
         outline_model_options = ["llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
         outline_selected_model = st.selectbox("Outline generation:", outline_model_options)
-        content_model_options = ["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
+        content_model_options = ["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it", "gemma2-9b-it"]
         content_selected_model = st.selectbox("Content generation:", content_model_options)
 
         
@@ -449,7 +449,7 @@ try:
             print("Structure: ",notes_structure)
 
             display_status("Generating notes ...")
-            total_generation_statistics = GenerationStatistics(model_name="llama3-8b-8192")
+            total_generation_statistics = GenerationStatistics(model_name=str(content_selected_model))
             clear_status()
 
 
