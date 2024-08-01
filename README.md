@@ -8,8 +8,8 @@
 </h2>
 
 <p align="center">
- <a href="https://github.com/bklieger/groqnotes/stargazers"><img src="https://img.shields.io/github/stars/bklieger/groqnotes"></a>
- <a href="https://github.com/bklieger/groqnotes/blob/main/LICENSE.md">
+ <a href="https://github.com/bklieger/scribewizard/stargazers"><img src="https://img.shields.io/github/stars/bklieger/scribewizard"></a>
+ <a href="https://github.com/bklieger/scribewizard/blob/main/LICENSE.md">
  <img src="https://img.shields.io/badge/License-MIT-green.svg">
  </a>
 </p>
@@ -55,18 +55,13 @@ ScribeWizard is a streamlit app that scaffolds the creation of structured lectur
 ## Quickstart
 
 > [!IMPORTANT]
-> To use ScribeWizard, you can use a hosted version at [groqnotes.streamlit.app](https://groqnotes.streamlit.app) or [groqnotes.replit.app](https://groqnotes.streamlit.app).
+> To use ScribeWizard, you can use a hosted version at [scribewizard.streamlit.app](https://scribewizard.streamlit.app).
 > Alternatively, you can run ScribeWizard locally with Streamlit using the quickstart instructions.
 
 
 ### Hosted on Streamlit:
 
-To use ScribeWizard, you can use the hosted version at [groqnotes.streamlit.app](https://groqnotes.streamlit.app)
-
-### Hosted on Replit:
-
-You can also use the hosted version on replit at [groqnotes.replit.app](https://groqnotes.streamlit.app)
-> The project can be forked on replit here: [replit.com/@bklieger/groqnotes](https://replit.com/@bklieger/groqnotes)
+To use ScribeWizard, you can use the hosted version at [scribewizard.streamlit.app](https://scribewizard.streamlit.app)
 
 
 ### Run locally:
@@ -122,11 +117,6 @@ ScribeWizard may generate inaccurate information or placeholder content. It shou
 ## Contributing
 
 Improvements through PRs are welcome!
-
-
-## One-Click Deployment
-
-[![Deploy to RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=296)
 
 
 ## Changelog
