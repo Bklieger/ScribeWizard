@@ -3,7 +3,7 @@
  <img src="https://i.imgur.com/scoiUgD.png" alt="Generate Organizes Notes with ScribeWizard" width="150">
  <br>
  <br>
- ScribeWizard: Generate organized notes from audio<br>using Groq, Whisper, and Llama3
+ ScribeWizard: Generate organized notes from audio<br>using Groq, Whisper, and Llama 3
  <br>
 </h2>
 
