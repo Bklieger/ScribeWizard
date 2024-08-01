@@ -23,8 +23,7 @@
 
 <br>
 
-[Demo of ScribeWizard](https://github.com/Bklieger/groqnotes/assets/62450410/9c54dab3-21ad-42d6-8504-364e0aa6acde)
-
+[Demo of ScribeWizard](https://github.com/user-attachments/assets/c222bea0-3784-4f06-b431-ef81eea5691d)
 > Demo of ScribeWizard fast transcription of audio and generation of structured notes
 
 
