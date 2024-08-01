@@ -24,8 +24,8 @@ if 'groq' not in st.session_state:
         st.session_state.groq = Groq()
 
 st.set_page_config(
-    page_title="GroqNotes",
-    page_icon="🗒️",
+    page_title="ScribeWizard",
+    page_icon="🧙‍♂️",
 )
       
 class GenerationStatistics:
@@ -264,7 +264,7 @@ if 'statistics_text' not in st.session_state:
     st.session_state.statistics_text = ""
 
 st.write("""
-# GroqNotes: Create structured notes from audio 🗒️⚡
+# ScribeWizard: Create structured notes from audio 🗒️⚡
 """)
 
 def disable():
@@ -293,8 +293,8 @@ try:
             }
         }
 
-        st.write(f"# 🗒️ GroqNotes \n## Generate notes from audio in seconds using Groq, Whisper, and Llama3")
-        st.markdown(f"[Github Repository](https://github.com/bklieger/groqnotes)\n\nAs with all generative AI, content may include inaccurate or placeholder information. GroqNotes is in beta and all feedback is welcome!")
+        st.write(f"# 🧙‍♂️ ScribeWizard \n## Generate notes from audio in seconds using Groq, Whisper, and Llama3")
+        st.markdown(f"[Github Repository](https://github.com/bklieger/groqnotes)\n\nAs with all generative AI, content may include inaccurate or placeholder information. ScribeWizard is in beta and all feedback is welcome!")
 
         st.write(f"---")
 
@@ -322,7 +322,7 @@ try:
         st.write(f"---")
 
         st.write("# Customization Settings\n🧪 These settings are experimental.\n")
-        st.write(f"By default, GroqNotes uses Llama3-70b for generating the notes outline and Llama3-8b for the content. This balances quality with speed and rate limit usage. You can customize these selections below.")
+        st.write(f"By default, ScribeWizard uses Llama3-70b for generating the notes outline and Llama3-8b for the content. This balances quality with speed and rate limit usage. You can customize these selections below.")
         outline_model_options = ["llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
         outline_selected_model = st.selectbox("Outline generation:", outline_model_options)
         content_model_options = ["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it", "gemma2-9b-it"]
@@ -489,7 +489,7 @@ except Exception as e:
     st.session_state.button_disabled = False
 
     if hasattr(e, 'status_code') and e.status_code == 413:
-        # In the future, this limitation will be fixed as GroqNotes will automatically split the audio file and transcribe each part.
+        # In the future, this limitation will be fixed as ScribeWizard will automatically split the audio file and transcribe each part.
         st.error(FILE_TOO_LARGE_MESSAGE)
     else:
         st.error(e)
