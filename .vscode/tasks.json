@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Streamlit",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "-m",
+                "streamlit",
+                "run",
+                "main.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Runs the Streamlit app using the Python module command."
+        }
+    ]
+}

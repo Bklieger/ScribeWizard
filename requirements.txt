@@ -72,3 +72,5 @@ webencodings==0.5.1
 websockets==12.0
 yt-dlp @ https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz
 zopfli==0.2.3
+youtube_transcript_api
+pyperclip

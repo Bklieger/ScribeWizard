@@ -1,3 +1,5 @@
+import re
+import pyperclip
 import streamlit as st
 from groq import Groq
 import json
@@ -6,6 +8,7 @@ from io import BytesIO
 from md2pdf.core import md2pdf
 from dotenv import load_dotenv
 from download import download_video_audio, delete_download
+from youtube_transcript_api import YouTubeTranscriptApi
 
 load_dotenv()
 
@@ -183,6 +186,7 @@ def transcribe_audio(audio_file):
     results = transcription.text
     return results
 
+
 def generate_notes_structure(transcript: str, model: str = "llama3-70b-8192"):
     """
     Returns notes structure content as well as total tokens and total time for generation.
@@ -202,11 +206,11 @@ def generate_notes_structure(transcript: str, model: str = "llama3-70b-8192"):
         messages=[
             {
                 "role": "system",
-                "content": "Write in JSON format:\n\n{\"Title of section goes here\":\"Description of section goes here\",\"Title of section goes here\":\"Description of section goes here\",\"Title of section goes here\":\"Description of section goes here\"}"
+                "content": "Write the response strictly in JSON format with no additional text or bullet points. Structure it like this:\n\n{\"Section Title\":\"Description\", \"Section Title\":\"Description\", \"Section Title\":\"Description\"}. DONT include information from the example, but ONLY from the TRANSCRIPT."
             },
             {
                 "role": "user",
-                "content": f"### Transcript {transcript}\n\n### Example\n\n{shot_example}### Instructions\n\nCreate a structure for comprehensive notes on the above transcribed audio. Section titles and content descriptions must be comprehensive. Quality over quantity."
+                "content": f"### Transcript {transcript}\n\n### Example\n\n{shot_example}### Instructions\n\nCreate a structure for comprehensive notes on the above transcribed audio. Section titles and content descriptions must be concise and formatted as a valid JSON object."
             }
         ],
         temperature=0.3,
@@ -221,6 +225,7 @@ def generate_notes_structure(transcript: str, model: str = "llama3-70b-8192"):
     statistics_to_return = GenerationStatistics(input_time=usage.prompt_time, output_time=usage.completion_time, input_tokens=usage.prompt_tokens, output_tokens=usage.completion_tokens, total_time=usage.total_time, model_name=model)
 
     return statistics_to_return, completion.choices[0].message.content
+
 
 def generate_section(transcript: str, existing_notes: str, section: str, model: str = "llama3-8b-8192"):
     stream = st.session_state.groq.chat.completions.create(
@@ -276,22 +281,21 @@ def enable():
 def empty_st():
     st.empty()
 
+
+def get_youtube_captions(youtube_link):
+    pattern = r'(?:v=|\/)([0-9A-Za-z_-]{11}).*'
+    match = re.search(pattern, youtube_link)
+    if match:
+        video_id = match.group(1)
+        transcript = YouTubeTranscriptApi.get_transcript(video_id)
+        return ' '.join([entry['text'] for entry in transcript])
+    else:
+        return None
+
+
 try:
     with st.sidebar:
-        audio_files = {
-            "Transformers Explained by Google Cloud Tech": {
-                "file_path": "assets/audio/transformers_explained.m4a",
-                "youtube_link": "https://www.youtube.com/watch?v=SZorAJ4I-sA"
-            },
-            "The Essence of Calculus by 3Blue1Brown": {
-                "file_path": "assets/audio/essence_calculus.m4a",
-                "youtube_link": "https://www.youtube.com/watch?v=WUvTyaaNkzM"
-            },
-            "First 20 minutes of Groq's AMA": {
-                "file_path": "assets/audio/groq_ama_trimmed_20min.m4a",
-                "youtube_link": "https://www.youtube.com/watch?v=UztfweS-7MU"
-            }
-        }
+        audio_files = {}
 
         st.write(f"# 🧙‍♂️ ScribeWizard \n## Generate notes from audio in seconds using Groq, Whisper, and Llama3")
         st.markdown(f"[Github Repository](https://github.com/bklieger/scribewizard)\n\nAs with all generative AI, content may include inaccurate or placeholder information. ScribeWizard is in beta and all feedback is welcome!")
@@ -323,9 +327,9 @@ try:
 
         st.write("# Customization Settings\n🧪 These settings are experimental.\n")
         st.write(f"By default, ScribeWizard uses Llama3-70b for generating the notes outline and Llama3-8b for the content. This balances quality with speed and rate limit usage. You can customize these selections below.")
-        outline_model_options = ["llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
+        outline_model_options = ["llama-3.1-70b-versatile", "llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
         outline_selected_model = st.selectbox("Outline generation:", outline_model_options)
-        content_model_options = ["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it", "gemma2-9b-it"]
+        content_model_options = ["llama-3.1-70b-versatile", "llama-3.1-8b-instant", "llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it", "gemma2-9b-it"]
         content_selected_model = st.selectbox("Content generation:", content_model_options)
 
         
@@ -357,10 +361,16 @@ try:
         else:
             raise ValueError("Please generate content first before downloading the notes.")
 
-    input_method = st.radio("Choose input method:", ["Upload audio file", "YouTube link"])
+    input_method = st.radio("Choose input method:", ["YouTube link", "Upload audio file"])
     audio_file = None
     youtube_link = None
     groq_input_key = None
+
+    def copy_to_clipboard():
+        content = st.session_state.notes.get_markdown_content()
+        pyperclip.copy(content)
+        st.success("Content copied to clipboard!")
+
     with st.form("groqform"):
         if not GROQ_API_KEY:
             groq_input_key = st.text_input("Enter your Groq API Key (gsk_yA...):", "", type="password")
@@ -412,46 +422,59 @@ try:
                 # Show temporary message before transcription is generated and statistics show
             
             audio_file_path = None
+            transcription_text = None
 
             if input_method == "YouTube link":
-                display_status("Downloading audio from YouTube link ....")
-                audio_file_path = download_video_audio(youtube_link, display_download_status)
-                if audio_file_path is None:
-                    st.error("Failed to download audio from YouTube link. Please try again.")
-                    enable()
-                    clear_status()
-                else:
-                    # Read the downloaded file and create a file-like objec
-                    display_status("Processing Youtube audio ....")
-                    with open(audio_file_path, 'rb') as f:
-                        file_contents = f.read()
-                    audio_file = BytesIO(file_contents)
+                if True:
+                    # try to download the captions (auto captions included) from youtube
+                    # to avoid the need of whisper transcriptions
+                    transcription_text = get_youtube_captions(youtube_link)
 
-                    # Check size first to ensure will work with Whisper
-                    if os.path.getsize(audio_file_path) > MAX_FILE_SIZE:
-                        raise ValueError(FILE_TOO_LARGE_MESSAGE)
+                # if captions are not available, download the video and transcribe its audio
+                if not transcription_text:
+                    display_status("Downloading audio from YouTube link ....")
+                    audio_file_path = download_video_audio(youtube_link, display_download_status)
+                    if audio_file_path is None:
+                        st.error("Failed to download audio from YouTube link. Please try again.")
+                        enable()
+                        clear_status()
+                    else:
+                        # Read the downloaded file and create a file-like objec
+                        display_status("Processing Youtube audio ....")
+                        with open(audio_file_path, 'rb') as f:
+                            file_contents = f.read()
+                        audio_file = BytesIO(file_contents)
 
-                    audio_file.name = os.path.basename(audio_file_path)  # Set the file name
-                    delete_download(audio_file_path)
-                clear_download_status()
+                        # Check size first to ensure will work with Whisper
+                        if os.path.getsize(audio_file_path) > MAX_FILE_SIZE:
+                            raise ValueError(FILE_TOO_LARGE_MESSAGE)
+
+                        audio_file.name = os.path.basename(audio_file_path)  # Set the file name
+                        # TODO: uncomment this line
+                        # delete_download(audio_file_path)
+                    clear_download_status()
 
             if not GROQ_API_KEY:
                 st.session_state.groq = Groq(api_key=groq_input_key)
 
-            display_status("Transcribing audio in background....")
-            transcription_text = transcribe_audio(audio_file)
+            if not transcription_text:
+                display_status("Transcribing audio in background....")
+                print("Transcribing audio in background....")
+                transcription_text = transcribe_audio(audio_file)
+            else:
+                print("Transcription already exists (from YouTube captions)")
 
             display_statistics()
-            
 
             display_status("Generating notes structure....")
+            print("Generating notes structure....")
             large_model_generation_statistics, notes_structure = generate_notes_structure(transcription_text, model=str(outline_selected_model))
-            print("Structure: ",notes_structure)
+            print("Structure: ", notes_structure)
 
             display_status("Generating notes ...")
+            print("Generating notes ...")
             total_generation_statistics = GenerationStatistics(model_name=str(content_selected_model))
             clear_status()
-
 
             try:
                 notes_structure_json = json.loads(notes_structure)
@@ -480,10 +503,15 @@ try:
                             stream_section_content(content)
 
                 stream_section_content(notes_structure_json)
+
             except json.JSONDecodeError:
                 st.error("Failed to decode the notes structure. Please try again.")
 
             enable()
+
+    if st.button('Copy'):
+        copy_to_clipboard()
+
 
 except Exception as e:
     st.session_state.button_disabled = False
