@@ -294,7 +294,7 @@ try:
         }
 
         st.write(f"# 🧙‍♂️ ScribeWizard \n## Generate notes from audio in seconds using Groq, Whisper, and Llama3")
-        st.markdown(f"[Github Repository](https://github.com/bklieger/groqnotes)\n\nAs with all generative AI, content may include inaccurate or placeholder information. ScribeWizard is in beta and all feedback is welcome!")
+        st.markdown(f"[Github Repository](https://github.com/bklieger/scribewizard)\n\nAs with all generative AI, content may include inaccurate or placeholder information. ScribeWizard is in beta and all feedback is welcome!")
 
         st.write(f"---")
 
