@@ -2,4 +2,4 @@
 venv
 .venv
 **.pyc
-downloads/
+downloads/.DS_Store

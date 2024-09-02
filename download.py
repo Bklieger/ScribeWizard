@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import re
 import yt_dlp as youtube_dl
 import os
 import time
@@ -48,6 +49,21 @@ def get_ydl_opts(external_logger=lambda x: None):
 }
 
 
+def resample_mp3(filename, sampling_rate):
+    # rename the mp3 file to replace spaces and dots
+    escaped_filename = filename.replace(' ', r'\ ')
+    out_filename = './' + filename.replace(' ', '_').replace('.', '-')[2:].replace('-mp3', f'_resampled_{sampling_rate}k.mp3')
+    escaped_out_filename = out_filename.replace(' ', r'\ ')
+
+    print(f"Resampling {filename} to {sampling_rate} to target size 25 MB limit")
+    os.system(f"ffmpeg -i {escaped_filename} -b:a {sampling_rate}k -bufsize {sampling_rate}k -f mp3 {escaped_out_filename}")
+    new_filesize = os.path.getsize(out_filename)
+    print(f"Resampled {out_filename} to size {int(new_filesize / (1024*1024))}MB")
+    # TODO: uncomment this line
+    # os.remove(filename)
+    return new_filesize, out_filename
+
+
 def download_video_audio(url, external_logger=lambda x: None):
     retries = 0
     while retries < max_retries:
@@ -57,12 +73,14 @@ def download_video_audio(url, external_logger=lambda x: None):
                 print("Going to download ", url)
                 info = ydl.extract_info(url, download=False)
                 filesize = info.get("filesize", 0)
-                if filesize > MAX_FILE_SIZE:
-                    raise Exception(FILE_TOO_LARGE_MESSAGE)
                 filename = ydl.prepare_filename(info)
                 res = ydl.download([url])
                 print("youtube-dl result :", res)
                 mp3_filename = os.path.splitext(filename)[0] + '.mp3'
+                if filesize > MAX_FILE_SIZE:
+                    filesize, mp3_filename = resample_mp3(mp3_filename, 48)
+                    if filesize > MAX_FILE_SIZE:
+                        raise Exception(FILE_TOO_LARGE_MESSAGE)
                 print('mp3 file name - ', mp3_filename)
                 return mp3_filename
         except Exception as e:
