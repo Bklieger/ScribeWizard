@@ -287,7 +287,7 @@ def get_youtube_captions(youtube_link):
     match = re.search(pattern, youtube_link)
     if match:
         video_id = match.group(1)
-        transcript = YouTubeTranscriptApi.get_transcript(video_id)
+        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=('en', 'pt'))
         return ' '.join([entry['text'] for entry in transcript])
     else:
         return None
