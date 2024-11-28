@@ -6,6 +6,7 @@ from io import BytesIO
 from md2pdf.core import md2pdf
 from dotenv import load_dotenv
 from download import download_video_audio, delete_download
+import pyobjc
 
 load_dotenv()
 
@@ -167,6 +168,7 @@ def create_pdf_file(content: str):
     pdf_buffer.seek(0)
     return pdf_buffer
 
+@pyobjc.background_task
 def transcribe_audio(audio_file):
     """
     Transcribes audio using Groq's Whisper API.
