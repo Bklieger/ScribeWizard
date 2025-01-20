@@ -5,15 +5,11 @@ import os
 from io import BytesIO
 from md2pdf.core import md2pdf
 from dotenv import load_dotenv
-from download import download_video_audio, delete_download
+from download import download_video_audio, delete_download, MAX_FILE_SIZE, FILE_TOO_LARGE_MESSAGE
 
 load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", None)
-
-MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
-FILE_TOO_LARGE_MESSAGE = "The audio file is too large for the current size and rate limits using Whisper. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB."
-
 audio_file_path = None
 
 if 'api_key' not in st.session_state:
