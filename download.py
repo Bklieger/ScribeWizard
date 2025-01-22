@@ -5,8 +5,8 @@ import time
 import os
 import shutil
 
-MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
-FILE_TOO_LARGE_MESSAGE = "The audio file is too large for the current size and rate limits using Whisper. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 25 MB."
+MAX_FILE_SIZE = 100 * 1024 * 1024  # 100 MB
+FILE_TOO_LARGE_MESSAGE = "The audio file is too large for the current size and rate limits using Whisper. If you used a YouTube link, please try a shorter video clip. If you uploaded an audio file, try trimming or compressing the audio to under 100 MB."
 max_retries = 3
 delay = 2
 
